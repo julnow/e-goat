@@ -64,6 +64,7 @@ public class UDPClient {
          //creating string of files to be sent
          StringBuilder listOfFiles = new StringBuilder();
          for (Files file : files) {
+        	 //aby odtworzyc liste w serwerze, po prostu trzeba odczytac tego stringa linijka po linijce
              listOfFiles.append(file.getSha()).append("\t").append(file.getAddress()).append("\n");
          }
          //sending list to server
@@ -82,6 +83,34 @@ public class UDPClient {
          } catch (SocketTimeoutException ste) {
              System.out.println("!No response from the server");
          }
+         
+         while(true) {
+ 	        //send sha512 of file to be read
+ 	        System.out.println("Type sha512 of the file to be downloaded:");
+ 	    	String sha = scan.nextLine();
+ 	    	stringContents = sha.getBytes(StandardCharsets.UTF_8);
+ 	        sentPacket = new DatagramPacket(stringContents, stringContents.length);
+ 	        sentPacket.setAddress(serverAddress);
+ 	        sentPacket.setPort(Config.PORT);
+ 	        socket.send(sentPacket);
+ 	        
+ 	        //Read response from the server
+ 	        receivePacket = new DatagramPacket( new byte[Config.BUFFER_SIZE], Config.BUFFER_SIZE);
+ 	        socket.setSoTimeout(1010);
+ 	
+ 	        try {
+ 	            socket.receive(receivePacket);
+ 	            int length = receivePacket.getLength();
+ 	            message = new String(receivePacket.getData(), 0, length, StandardCharsets.UTF_8);
+ 	            if (message.equals("No file!")) System.out.println(message);
+ 	            else break;
+ 	        } catch (SocketTimeoutException ste) {
+ 	            System.out.println("No response from the server!");
+ 	        }
+         }
+         System.out.println(message + "Choose address and copy it");
+         String clientAdress = scan.nextLine();
+     }
     	
     }
-   }
+ 
