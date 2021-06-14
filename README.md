@@ -1,11 +1,11 @@
 # e-goat  
-sieci wymiany plików peer-to-peer
+sieć wymiany plików peer-to-peer
 
 *Paulina Czyż, Julian Nowak*
 
 ## Założenia
 
-Projekt składa się z 2 programów: klienta i serwera. Na serwerze przechowywana jest lista plików udostępnianych przez poszczególnych klientów, wraz z informacją o klientach którzy je posiadają. Klienci wymieniają się plikami bezpośrednio między sobą.
+Projekt składa się z 2 programów: klienta i serwera. Na serwerze przechowywana jest lista plików udostępnianych przez poszczególnych klientów, wraz z informacją o klientach, którzy je posiadają. Klienci wymieniają się plikami bezpośrednio między sobą.
 
 ## Wymagania
  - Java 15
@@ -31,4 +31,4 @@ Do komunikacji pomiędzy serwerem a klientami wykorzystany jest protokół UDP (
 
 - Serwer w odpowiedzi odsyła listę wszystkich klientów, którzy zgłosili, że taki plik posiadają. W przypadku gdy nikt nie udostępnia takiego pliku serwer wysyła odpowiednią wiadomość.
 
-- Jeśli plik istnieje klient pobiera  go bezpośrednio od osoby, która go udostępnia i sprawdza czy otrzymał plik o prawidłowej sumie kontrolnej.
+-(niezaimplementowane) Jeśli plik istnieje, klient pobiera go bezpośrednio od osoby, która go udostępnia i sprawdza czy otrzymał plik o prawidłowej sumie kontrolnej.
