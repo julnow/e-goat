@@ -16,7 +16,7 @@ import java.io.FileInputStream;
 
 public class UDPClient {
 	
-	//stackoverflow function to check sha512
+	//function to check sha512
 	private static String check(String path, MessageDigest md) throws IOException {
         try (DigestInputStream dis = new DigestInputStream(new FileInputStream(path), md)) {
             while (dis.read() != -1);
@@ -35,6 +35,11 @@ public class UDPClient {
 
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
  
+    	//creating connection with server - z http://www.if.pw.edu.pl/~lgraczyk/wiki/index.php/SK_Zadanie_4_Remote
+   	 	String message = "List of files";
+        InetAddress serverAddress = InetAddress.getByName("localhost");
+        System.out.println("connecting to: " + serverAddress);
+    	
     	ArrayList<Files> files = new ArrayList<Files>();
     	//files to be shared:
     	Scanner scan = new Scanner(System.in);
@@ -52,17 +57,14 @@ public class UDPClient {
             if (fileEntry.isFile()) {
             	MessageDigest md = MessageDigest.getInstance("SHA-512"); //creating md
                 String sha = check(fileEntry.getPath(), md); //create sha for file
-                Files file = new Files(sha, fileEntry.getPath()); //adding to list of files
+                Files file = new Files(sha, serverAddress+"/"+fileEntry.getPath()); //adding to list of files
                 files.add(file);
             } else {
                 System.out.println("error with " + fileEntry.getName());
             }
         }
     	
-    	//creating connection with server - z http://www.if.pw.edu.pl/~lgraczyk/wiki/index.php/SK_Zadanie_4_Remote
-    	 String message = "List of files";
-         InetAddress serverAddress = InetAddress.getByName("localhost");
-         System.out.println("connecting to: " + serverAddress);
+    	
          
          DatagramSocket socket = new DatagramSocket();
          byte[] stringContents = message.getBytes("utf8");
