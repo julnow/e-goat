@@ -27,6 +27,8 @@ public class UDPClient {
         for (byte b : md.digest()) {
             result.append(String.format("%02x", b));
         }
+        System.out.println("Your sha512: ");
+        System.out.println(result);
         return result.toString();
 
     }
