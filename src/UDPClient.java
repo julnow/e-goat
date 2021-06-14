@@ -6,8 +6,6 @@ import java.net.SocketTimeoutException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Scanner;
-
-
 import java.io.File;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
@@ -35,13 +33,13 @@ public class UDPClient {
 
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
  
-    	//creating connection with server - z http://www.if.pw.edu.pl/~lgraczyk/wiki/index.php/SK_Zadanie_4_Remote
+    	//creating connection with server
    	 	String message = "List of files";
         InetAddress serverAddress = InetAddress.getByName("localhost");
         System.out.println("connecting to: " + serverAddress);
     	
-    	ArrayList<Files> files = new ArrayList<Files>();
-    	//files to be shared:
+      //files to be shared:
+    	ArrayList<Files> files = new ArrayList<Files>();	
     	Scanner scan = new Scanner(System.in);
     	System.out.println("pls give path to shared folder:");
     	String path = scan.nextLine();
@@ -63,12 +61,9 @@ public class UDPClient {
                 System.out.println("error with " + fileEntry.getName());
             }
         }
-    	
-    	
-         
+    	       
          DatagramSocket socket = new DatagramSocket();
          byte[] stringContents = message.getBytes("utf8");
-
          DatagramPacket sentPacket = new DatagramPacket(stringContents, stringContents.length);
          sentPacket.setAddress(serverAddress);
          sentPacket.setPort(Config.PORT);
@@ -86,7 +81,6 @@ public class UDPClient {
          sentPacket.setPort(Config.PORT);
          socket.send(sentPacket);
          System.out.println("list of files sent to server");
-         
          //checking response from server
          DatagramPacket receivePacket = new DatagramPacket( new byte[Config.BUFFER_SIZE], Config.BUFFER_SIZE);
          socket.setSoTimeout(1010);
@@ -95,8 +89,7 @@ public class UDPClient {
              System.out.println("Server received data");
          } catch (SocketTimeoutException ste) {
              System.out.println("!No response from the server");
-         }
-         
+         }   
          //send sha512 of file to be read
         System.out.println("enter SHA512 of a file you wish to download: ");
         scan = new Scanner(System.in);
@@ -105,8 +98,7 @@ public class UDPClient {
  	    sentPacket = new DatagramPacket(stringContents, stringContents.length);
  	    sentPacket.setAddress(serverAddress);
  	    sentPacket.setPort(Config.PORT);
- 	    socket.send(sentPacket);
- 	        
+ 	    socket.send(sentPacket);    
  	    //Read response from the server (clients who have the file)
  	     receivePacket = new DatagramPacket( new byte[Config.BUFFER_SIZE], Config.BUFFER_SIZE);
  	     socket.setSoTimeout(1010);
@@ -119,8 +111,7 @@ public class UDPClient {
  	        } catch (SocketTimeoutException ste) {
  	            System.out.println("No response from the server!");
  	        }
-         
- 	        
+                
          //System.out.println(message + "Choose address and copy it");
          //String clientAdress = scan.nextLine();
      }

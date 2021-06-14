@@ -1,4 +1,3 @@
-
 public class Files {
 	
 	String sha512;
@@ -16,5 +15,4 @@ public class Files {
 	String getSha() {
 		return sha512;
 	}
-
 }

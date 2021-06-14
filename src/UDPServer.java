@@ -5,13 +5,10 @@ import java.util.ArrayList;
 
 public class UDPServer {
 	
-	
-
     public static void main(String[] args) throws Exception{
     	
         //Otwarcie gniazda z okreslonym portem
         DatagramSocket datagramSocket = new DatagramSocket(Config.PORT);
-
         byte[] byteResponse;
         ArrayList<Files> files = new ArrayList<Files>();
 
@@ -56,12 +53,10 @@ public class UDPServer {
             	}else {
             		byteResponse = clientsList.toString().getBytes("utf8");
             	}
-            }
-                  
+            }       
 
           	System.out.println(message);
             Thread.sleep(1000); 
-
             DatagramPacket response
                     = new DatagramPacket(
                         byteResponse, byteResponse.length, address, port);
