@@ -34,14 +34,21 @@ public class UDPServer {
                 String[] lines = message.split("\n");
                 for (String line : lines) {
                 	String[] splitLine = line.split("\t");
-                	files.add(new Files(splitLine[0], splitLine[1]));
+                	files.add(new Files(splitLine[0], splitLine[1], port, address));
                 	}
                 byteResponse = "files added to the list".getBytes("utf8");
+            }else if(message.equals("y")){
+            	StringBuilder fileList = new StringBuilder();
+            	for(Files file : files)
+            	{
+            		fileList.append(file.getSha()).append("\n");
+            	}
+            	byteResponse = fileList.toString().getBytes("utf8");
             }else {
             	ArrayList<String> clients = new ArrayList<String>();
             	for (Files file : files) {
             		if(message.equals(file.getSha())) {
-            			clients.add(file.getAddress());
+            			clients.add(file.getIp() + "\t" + file.getPort() + "\t" + file.getAddress());
             		}
             	}
             	StringBuilder clientsList = new StringBuilder();
