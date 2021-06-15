@@ -55,7 +55,7 @@ public class UDPClient {
             if (fileEntry.isFile()) {
             	MessageDigest md = MessageDigest.getInstance("SHA-512"); //creating md
                 String sha = check(fileEntry.getPath(), md); //create sha for file
-                Files file = new Files(sha, serverAddress+"/"+fileEntry.getPath()); //adding to list of files
+                Files file = new Files(sha, fileEntry.getPath()); //adding to list of files
                 files.add(file);
             } else {
                 System.out.println("error with " + fileEntry.getName());
@@ -89,7 +89,29 @@ public class UDPClient {
              System.out.println("Server received data");
          } catch (SocketTimeoutException ste) {
              System.out.println("!No response from the server");
-         }   
+         } 
+         
+        //list of available files
+        System.out.println("do you want to download a file? (y/n)");
+        String resp = scan.nextLine();
+        if(resp.equals("y")) {
+        stringContents = "y".getBytes("utf8");
+        sentPacket = new DatagramPacket(stringContents, stringContents.length);
+  	    sentPacket.setAddress(serverAddress);
+  	    sentPacket.setPort(Config.PORT);
+  	    socket.send(sentPacket);
+  	    receivePacket = new DatagramPacket( new byte[Config.BUFFER_SIZE], Config.BUFFER_SIZE);
+  	    socket.setSoTimeout(1010);
+      try {
+          socket.receive(receivePacket);
+          int length = receivePacket.getLength();
+	      message = new String(receivePacket.getData(), 0, length, StandardCharsets.UTF_8);
+	      System.out.println("available files: \n" + message);
+          
+      } catch (SocketTimeoutException ste) {
+          System.out.println("!No response from the server");
+      } 
+        
          //send sha512 of file to be read
         System.out.println("enter SHA512 of a file you wish to download: ");
         scan = new Scanner(System.in);
@@ -115,6 +137,7 @@ public class UDPClient {
          //System.out.println(message + "Choose address and copy it");
          //String clientAdress = scan.nextLine();
      }
+    }
     	
     }
  
